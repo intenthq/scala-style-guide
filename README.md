@@ -1,16 +1,13 @@
-PayPal Scala Style Guidelines
+Intent HQ Scala Style Guidelines
 =================
 
-This repository contains style guidelines for writing Scala code at PayPal. Here are our goals for style
+This repository contains style guidelines for writing Scala code at Intent HQ. Here are our goals for style
 guides in this repository:
 
 1. Our style guidelines should be clear.
 2. We all should agree on our style guidelines.
 3. We should change this guideline as we learn and as Scala evolves.
-4. Keep the [scalastyle-config.xml](https://github.com/paypal/scala-style-guide/blob/develop/scalastyle-config.xml) in our projects in line with this guide as much as possible.
-
-This repository follows git-flow. If you have a new style guideline, open a pull request against `develop`. We'll
-discuss in the PR comments. The official guidelines live in [master](https://github.com/paypal/scala-style-guide/blob/master/README.md)
+4. Keep the [scalastyle-config.xml](https://github.com/intenthq/scala-style-guide/blob/develop/scalastyle-config.xml) in our projects in line with this guide as much as possible.
 
 # Whitespace
 
@@ -19,7 +16,7 @@ discuss in the PR comments. The official guidelines live in [master](https://git
 
 # Line Length
 
-* Use a maximum line length of 160 characters.
+* Use a maximum line length of 120 characters.
 
 # Names
 
@@ -67,6 +64,8 @@ Limit the number of public methods in your class to 30.
 
 # Throwables
 
+Please consider not using them in the first place, and use type-safe `Either`/`Either3` instead. If you have to use a `Throwable`, then:
+
 1. Prefer non-case classes when defining exceptions and errors unless you plan on pattern matching on the exception.
 2. If providing a cause is desirable and not mandatory then define it as an option. Note, the use of ```.orNull```.
 
@@ -92,12 +91,12 @@ akka
 spray
 all other imports
 ___blank line___
-com.ebay
-com.paypal
+com.globaldawn
+com.intenthq
 ```
 
 You should also regularly run IntelliJ's Optimize Imports (Edit > Optimize Imports) against
-your code before merging with `develop`, to maintain import cleanliness.
+your code before merging with `master`, to maintain import cleanliness.
 
 ## Location
 
@@ -170,13 +169,17 @@ private implicit lazy val someSetting = ...
 Rules to follow for all functions:
 
 * Always put a space after `:` characters in function signatures.
-* Always put a space after `,` in function signatures.
+* Always put a space after `,` in function signatures
+* Always add an excplicit return type defintion.
+
+```scala
+def add(a: Int, b: Int): Int = { (a, b) =>
+  x + y
+}
+```
 
 ## Public Functions
-All public functions and methods, including those inside `object`s must have:
-
-* A return type
-* Scaladoc including a function overview, information on parameters, and information on the return value. See the [Scaladoc](#scaladoc-comments-and-annotations) section for more details.
+All public functions and methods, including those inside `object`s must have Scaladoc, including a function overview, information on parameters, and information on the return value. See the [Scaladoc](#scaladoc-comments-and-annotations) section for more details.
 
 Here is a complete example of a function inside of an `object`.
 
