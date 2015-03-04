@@ -482,6 +482,7 @@ specification into its own file. Some other basics:
 
 * Mocks should be done with `Mockito`, but prefer real objects instead.
 * Prefer using traits over defining `val`/`var` items inside the `Specification`.
+* Try to avoid usage of `isolated`/`sequential` if you can help it, it slows the tests down. Most of the time, you'll want to use this because you are sharing `val`/`var` items that you should be using a trait for instead.
 
 # Scaladoc, Comments, and Annotations
 
