@@ -22,12 +22,14 @@ guides in this repository:
 
 ## Functions, Classes and Variables
 
-Use camel case for all function, class and variable names. Classes start with an upper case letter, and values and
+Use camel case for all function, class and variable/constant names. Classes start with an upper case letter, and values and
 functions start with a lower case. Here are some examples:
 
 ```scala
 class MyClass {
+  // Note that val constants use camel case too.
   val myValue = 1
+  var myOtherValue = 1
   def myFunction: Int = myValue
 }
 ```
