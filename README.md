@@ -399,18 +399,15 @@ Option(123) match {
 
 ## Option
 
-Flows with `Option` values should be constructed using the `match` keyword as follows.
+Flows with `Option` values should be constructed using the `fold` function as follows.
 
 ```scala
 def stuff(i: Int): Int = { ... }
 
-Option(123) match {
-  case None => 0
-  case Some(number) => stuff(number)
-}
+Option(123).fold(0) { stuff(number) + 10 }
 ```
 
-The `.fold` operator should generally not be used. Simple, single-line patterns are acceptable for `.fold`, such as:
+Simple, single-line patterns are also acceptable for `.fold`, such as:
 
 ```scala
 def stuff(i: Int): Int = { ... }
@@ -426,22 +423,7 @@ def stuff(i: Int): Int = { ... }
 Option(123).map(stuff).getOrElse(0)
 ```
 
-You should enforce expected type signatures, as `match` does not guarantee consistent types between match outcomes
-(e.g. the `None` case could return `Int`, while the `Some` case could return `String`).
-
-When creating `Option`s, use
-[`.opt`](https://github.com/paypal/cascade/blob/develop/common/src/main/scala/com/paypal/cascade/common/option/option.scala#L61).
-If the value is a constant, use
-[`.some`](https://github.com/paypal/cascade/blob/develop/common/src/main/scala/com/paypal/cascade/common/option/option.scala#L55)
-instead.
-
-```scala
-val doThisForConstants = "hello".some
-val notThisForConstants = "goodbye".opt
-
-val doThisForEverythingElse = foo().opt
-val notThisForEverythingElse = bar().some
-```
+Use what you feel is most readable.
 
 ## For Comprehension
 
