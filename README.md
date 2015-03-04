@@ -170,12 +170,10 @@ Rules to follow for all functions:
 
 * Always put a space after `:` characters in function signatures.
 * Always put a space after `,` in function signatures
-* Always add an excplicit return type defintion.
+* Always add explicit parameter and return types - it will help catch type problems sooner!.
 
 ```scala
-def add(a: Int, b: Int): Int = { (a, b) =>
-  x + y
-}
+def add(a: Int, b: Int): Int = a + b
 ```
 
 ## Public Functions
@@ -476,59 +474,14 @@ for {
 }
 ```
 
-# Akka
-
-## Ask and Tell
-
-Prefer ```!``` and ```?``` over ```.tell``` and ```.ask```.
-
-```scala
-someActor1 ! msg
-someActor2 ? msg
-```
-
-is preferred over
-
-```scala
-someActor1.tell(msg)
-someActor2.ask(msg)
-```
-
 # Tests
 
 Write your tests using [Specs2](http://etorreborre.github.io/specs2/). Each
-specification is a single `class` that extends `Specification`. Put each
-specification into its own file. Inside each specification, follow these rules:
+specification is a single `class` that extends `Specification` (use of `mutable.Specification` is allowed). Put each
+specification into its own file. Some other basics:
 
-- create a single `trait` inside your `Specification` class that extends
-[`CommonImmutableSpecificationContext`](https://github.com/paypal/cascade/blob/develop/common/src/test/scala/com/paypal/cascade/common/tests/util/CommonImmutableSpecificationContext.scala)
-(from [Cascade](https://github.com/paypal/cascade).) Most people name this
-trait `Context`.
-- Group tests into `class`es, `case class`es or `object`s at your discretion.
-- All of your grouped test `class`es, `case class`es and `objects`s should go
-inside your specification class and should extend your `Context` trait
-- All methods inside your test classes should be wrapped with `apply`.
-When you do so, `CommonImmutableSpecificationContext` will execute `before` and
-`after` hooks automatically.
-- Your tests execute concurrently by default. Only change them to execute
-sequentially for a good reason, and document that reason in comments.
-
-Here's an example of the above rules in code:
-
-```scala
-class MyTest extends Specification { override def is = s2"""
-  add(1, 2) should equal 3 ${Add().equals3()}
-  """
-
-  trait Context extends CommonImmutableSpecificationContext
-
-  case class Add() extends Context {
-    def equals3 = apply {
-      add(1, 2) must beEqualTo(3)
-    }
-  }
-}
-```
+* Mocks should be done with `Mockito`, but prefer real objects instead.
+* Prefer using traits over defining `val`/`var` items inside the `Specification`.
 
 # Scaladoc, Comments, and Annotations
 
