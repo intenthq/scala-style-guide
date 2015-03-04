@@ -7,7 +7,7 @@ guides in this repository:
 1. Our style guidelines should be clear.
 2. We all should agree on our style guidelines.
 3. We should change this guideline as we learn and as Scala evolves.
-4. Keep the [scalastyle-config.xml](https://github.com/intenthq/scala-style-guide/blob/develop/scalastyle-config.xml) in our projects in line with this guide as much as possible.
+4. Keep the [scalastyle-config.xml](https://github.com/intenthq/scala-style-guide/blob/master/scalastyle-config.xml) in our projects in line with this guide as much as possible.
 
 # Whitespace
 
