@@ -476,6 +476,20 @@ Rules:
 
 Use your best judgment otherwise, and err toward more documentation rather than less.
 
+# Dependencies and SBT
+
+Try to avoid adding dependencies by considering whether an existing one already fulfills the needs you have. If you do add a dependency, make sure you add the version number in a strict way. This is because most Java/Scala libraries do not do semver correctly:
+
+```scala
+// Bad
+"com.github.seratch" %% "awscala" % "0.5.+"
+
+// Good
+"com.github.seratch" %% "awscala" % "0.5.9"
+```
+
+Think carefully about adding new modules to the SBT build. These have a hidden cost (compile times become longer, and increasingly sequential). Only abstract thinks out into common modules when you actually need something more than a few times.
+
 # Further Reading
 
 Several of these recommendations are adapted from the Scala Documentation Style Guide,
