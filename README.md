@@ -22,15 +22,19 @@ guides in this repository:
 
 ## Functions, Classes and Variables
 
-Use camel case for all function, class and variable/constant names. Classes start with an upper case letter, and values and
+Use camel case for all function, class and local variable names. Classes and class/object level constants start with an upper case letter, and values and
 functions start with a lower case. Here are some examples:
 
 ```scala
 class MyClass {
-  // Note that val constants use camel case too.
-  val myValue = 1
-  var myOtherValue = 1
-  def myFunction: Int = myValue
+  // Note that val constants use upper camel-case.
+  // This is to avoid mistakes when pattern matching on values of constants.
+  val ThisIsAConstant = ???
+
+  def thisIsAFunction: Int = {
+    val thisIsALocalVariable = ???
+    ???
+  }
 }
 ```
 ### Acronyms
@@ -62,7 +66,7 @@ package object mypackage {
 
 ## Public Methods
 
-Limit the number of public methods in your class to 30.
+Limit the number of public methods in your class as much as possible.
 
 # Throwables
 
@@ -136,25 +140,7 @@ object. It is automatically imported for you, so it's redundant to manually
 
 # Values
 
-Use `val` by default. `var`s should be limited to local variables or `private` class variables. Their usage
-should be well documented, including any considerations that developers must make with respect to concurrency.
-
-One common usage of `var`s will be inside of Akka `Actor`s. Here's an example of that usage:
-
-```scala
-class MyActor extends Actor {
-  //This is local state to the actor that represents the current sum of all integers it has received.
-  //It must be marked private and never accessed outside of the processing of a single message, to ensure
-  //that it's concurrency safe. Additionally, don't acquire a lock before you access this variable.
-  //Doing so might block message processing unnecessarily. If you follow all of these rules related to concurrency,
-  //you shouldn't need a lock anyway.
-  private var sum: Int = 0
-
-  override def receive: Receive {
-    case i: Int => sum = sum + 1
-  }
-}
-```
+Always use `val`. If you find a situation where you think you have to use `var`, consider asking others for advice on another approach. If you still think you need `var`, consider whether you are solving the correct problem with the correct language.
 
 ## Modifiers
 
@@ -429,12 +415,12 @@ Use what you feel is most readable.
 
 ## For Comprehension
 
-For comprehensions should generally not be wrapped in parentheses in order to recover, flatMap, etc.
-Instead, separate the for comprehension into its own variable and perform additional operations on that.
+For comprehensions should generally not be wrapped in parentheses in order to recover, flatMap, etc. Instead, separate the for comprehension into its own variable and perform additional operations on that.
 
 ```scala
-val userAddress = for {
-  address <- loadAddress()
+def userAddress(userId: Long) = for {
+  user <- fetchUser(userId)
+  address <- fetchAddress(user)
 } yield address
 
 userAddress.recover {
@@ -444,18 +430,24 @@ userAddress.recover {
 }
 ```
 
-In addition, if performing additional operations on the result of the yield as part of the result of the for comprehension itself,
-code should be separated by braces and begin on a newline. For example:
+Also, do not use `for` when you only have a single item. Always return the result directly, or favour `map`:
 
 ```scala
+// Bad
 for {
-  address <- loadAddress() // returns Option
-} yield {
-  address match {
-    case Some(s) => ...
-    case None => ...
-  }
-}
+  user <- fetchUser(userId)
+} yield user
+
+// Good
+fetchUser(userId)
+
+// Bad
+for {
+  id <- getLatestId
+} yield Post(id)
+
+// Good
+getLatestId.map(Post)
 ```
 
 # Tests
@@ -464,9 +456,9 @@ Write your tests using [Specs2](http://etorreborre.github.io/specs2/). Each
 specification is a single `class` that extends `Specification` (use of `mutable.Specification` is allowed). Put each
 specification into its own file. Some other basics:
 
-* Mocks should be done with `Mockito`, but prefer real objects instead.
-* Prefer using traits over defining `val`/`var` items inside the `Specification`.
-* Try to avoid usage of `isolated`/`sequential` if you can help it, it slows the tests down. Most of the time, you'll want to use this because you are sharing `val`/`var` items that you should be using a trait for instead.
+* Don't use mocking. You shouldn't need it. Consider whether you are trying to test something correctly in the first place, and whether you could avoid mocking by simply using a `trait` to abstract an interface you can test.
+* Prefer using traits over defining `val` items inside the `Specification`.
+* Try to avoid usage of `isolated`/`sequential` if you can help it, it slows the tests down.
 
 # Scaladoc, Comments, and Annotations
 
