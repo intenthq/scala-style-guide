@@ -392,7 +392,7 @@ Flows with `Option` values should be constructed using the `fold` function as fo
 ```scala
 def stuff(i: Int): Int = { ... }
 
-Option(123).fold(0) { stuff(number) + 10 }
+Option(123).fold(0) { stuff(_) + 10 }
 ```
 
 Simple, single-line patterns are also acceptable for `.fold`, such as:
