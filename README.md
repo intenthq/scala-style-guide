@@ -276,6 +276,38 @@ aLongMethodNameThatReturnsAFuture(
 }
 ```
 
+### Returning Values
+
+The last expression of the function should always be the intended return value.
+
+Use `()` if you want to discard a non-`Unit` return value.
+
+```scala
+def post(url: String): StatusCode = ???
+
+// Bad
+def returnNothing(url: String): Unit = {
+  post(url)
+}
+
+// Good
+def returnNothing(url: String): Unit = {
+  post(url)
+  ()
+}
+```
+
+Do not use use `return` as it
+[behaves differently](https://tpolecat.github.io/2014/05/09/return.html).
+
+The last statement should always match the return type
+
+```scala
+def returnFive(): Int = {
+
+}
+```
+
 ## Anonymous functions
 
 Anonymous functions start on the same line as preceding code. Declarations
